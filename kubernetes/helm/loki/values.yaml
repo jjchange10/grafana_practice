@@ -1,0 +1,62 @@
+deploymentMode: Distributed
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  ## s3となってますがminioを有効にすることで、内部でminioを呼び出します。
+  storage:
+    type: s3
+  useTestSchema: true
+
+# Configuration for the gateway
+gateway:
+  enabled: false
+
+# Configuration for the write pod(s)
+write:
+  replicas: 0
+  
+read:
+  replicas: 0
+  
+backend:
+  replicas: 0
+
+# 各コンポーネントの設定,検証のためreplicasは1としています。
+ingester:
+  replicas: 1
+  zoneAwareReplication:
+    enabled: false
+
+distributor:
+  replicas: 1
+
+querier:
+  replicas: 1
+
+queryFrontend:
+  replicas: 1
+
+queryScheduler:
+  replicas: 1
+
+indexGateway:
+  replicas: 1
+
+compactor:
+  replicas: 1
+
+ruler:
+  enabled: true
+  replicas: 1
+
+# MinIO設定
+minio:
+  enabled: true
+  replicas: 1
+  persistence:
+    size: 5Gi
+
+chunksCache:
+  allocatedMemory: 1024
+  maxItemMemory: 2

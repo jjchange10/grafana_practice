@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alerts
+  namespace: prometheus
+data:
+  rules.yml: |
+    groups:
+      - name: deployment.rules
+        rules:
+          - alert: DeploymentPodMissing
+            expr: kube_deployment_spec_replicas - kube_deployment_status_replicas_available > 0
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              description: "Deployment has missing pods"
+              summary: "Deployment has missing pods"

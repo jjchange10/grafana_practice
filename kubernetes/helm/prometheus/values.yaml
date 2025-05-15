@@ -1,0 +1,40 @@
+configmapReload:
+  prometheus:
+    enabled: true
+    name: configmap-reload
+    extraVolumeDirs:
+      - /etc/alerts.d
+
+    extraConfigmapMounts:
+      - name: prometheus-alerts
+        mountPath: /etc/alerts.d
+        subPath: ""
+        configMap: prometheus-alerts
+        readOnly: true
+
+server:
+  persistentVolume:
+    enabled: false
+
+  extraConfigmapMounts:
+    - name: prometheus-alerts
+      mountPath: /etc/alerts.d
+      subPath: ""
+      configMap: prometheus-alerts
+      readOnly: true
+
+serverFiles:
+  prometheus.yml:
+    rule_files:
+      - /etc/config/recording_rules.yml
+      - /etc/config/alerting_rules.yml
+    ## Below two files are DEPRECATED will be removed from this default values file
+      - /etc/config/rules
+      - /etc/config/alerts
+      - /etc/alerts.d/*.yml
+
+alertmanager:
+  enabled: true
+  persistence:
+    enabled: false
+
